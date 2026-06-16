@@ -1,0 +1,38 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Build
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (keep template)
+application-local.yml
+application-secret.yml
+
+# Temporary
+*.tmp
+*.swp
+*~
+
+# Database
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
