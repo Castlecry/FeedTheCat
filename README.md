@@ -136,7 +136,18 @@ sql/
 CREATE DATABASE weimao DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-2. 修改 `backend/src/main/resources/application.yml` 中的数据库配置：
+2. 导入数据库初始化脚本（推荐）：
+```bash
+# 使用MySQL命令导入完整脚本
+mysql -u your_username -p weimao < sql/full_init.sql
+
+# 或者登录MySQL后执行
+mysql -u your_username -p
+USE weimao;
+SOURCE sql/full_init.sql;
+```
+
+3. 修改 `backend/src/main/resources/application.yml` 中的数据库配置：
 ```yaml
 spring:
   datasource:
@@ -144,6 +155,11 @@ spring:
     username: your_username
     password: your_password
 ```
+
+**数据库脚本说明**：
+- `sql/full_init.sql` - 完整初始化脚本，包含所有表结构、索引、存储过程
+- 脚本会自动创建数据库（如果不存在）并创建32张数据表
+- 表结构与当前生产环境完全一致
 
 ### 运行项目
 

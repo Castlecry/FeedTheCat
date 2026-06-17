@@ -580,6 +580,39 @@ CREATE TABLE IF NOT EXISTS messages (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息表';
 
 -- ----------------------------
+-- 合作医院表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS partner_hospitals (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '医院ID',
+    name VARCHAR(100) NOT NULL COMMENT '医院名称',
+    address VARCHAR(500) NOT NULL COMMENT '医院地址',
+    phone VARCHAR(20) COMMENT '联系电话',
+    description TEXT COMMENT '医院描述',
+    discount_policy TEXT COMMENT '优惠政策',
+    photos TEXT COMMENT '医院照片',
+    status TINYINT DEFAULT 1 COMMENT '状态：0-禁用, 1-正常',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_hospital_name (name),
+    INDEX idx_hospital_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='合作医院表';
+
+-- ----------------------------
+-- 用户完整信息视图表
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS user_full_info (
+    id BIGINT NOT NULL DEFAULT 0 COMMENT '用户ID',
+    phone VARCHAR(20) NOT NULL COMMENT '手机号',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    avatar VARCHAR(255) COMMENT '头像URL',
+    address VARCHAR(500) COMMENT '常用地址',
+    role TINYINT NOT NULL DEFAULT 0 COMMENT '用户角色',
+    credit_score INT DEFAULT 100 COMMENT '信用分',
+    status TINYINT NOT NULL DEFAULT 1 COMMENT '状态',
+    points_balance INT DEFAULT 0 COMMENT '积分余额'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户完整信息视图表';
+
+-- ----------------------------
 -- 创建存储过程：生成订单编号
 -- ----------------------------
 DELIMITER $$
