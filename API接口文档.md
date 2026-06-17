@@ -26,6 +26,7 @@
 | [十三、服务方资质模块](#十三服务方资质模块-serviceprovidercontroller) | 服务方认证审核 | 5 |
 | [十四、TNR模块](#十四tnr模块-tnrcontroller) | 流浪猫绝育申请 | 6 |
 | [十五、AI模块](#十五ai模块-aicontroller) | AI咨询、头像生成 | 4 |
+| [十六、文件上传模块](#十六文件上传模块-uploadcontroller) | 通用图片/视频上传 | 4 |
 
 ---
 
@@ -881,6 +882,35 @@
 ### 模块说明
 上门喂养服务订单管理，包含订单生命周期和服务记录。
 
+### 订单响应字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | Long | 订单ID |
+| orderNo | String | 订单编号 |
+| clientId | Long | 委托方ID |
+| clientName | String | 委托方姓名 |
+| serviceId | Long | 服务方ID |
+| serviceName | String | 服务方姓名 |
+| status | Integer | 订单状态 |
+| statusDescription | String | 状态描述 |
+| startTime | String | 服务开始时间 |
+| endTime | String | 服务结束时间 |
+| visitFrequency | Integer | 上门频次 |
+| feedingRequirements | String | 喂养要求 |
+| litterCleanStandard | String | 猫砂清理标准 |
+| specialCare | String | 特殊照料需求 |
+| entryMethod | Integer | 入户方式 |
+| keyStorageInfo | String | 钥匙寄存信息 |
+| emergencyContact | String | 紧急联系人 |
+| address | String | 服务地址 |
+| totalAmount | BigDecimal | 订单总额 |
+| actualPayment | BigDecimal | 实付金额 |
+| refundAmount | BigDecimal | 退款金额 |
+| commissionRate | BigDecimal | 佣金比例 |
+| createdAt | String | 创建时间 |
+| updatedAt | String | 更新时间 |
+
 ### 接口列表
 
 | 序号 | 接口 | 方法 | 认证 | 说明 |
@@ -1284,6 +1314,79 @@ AI辅助功能，包括猫咪咨询、头像生成和语录生成。当前为Moc
 
 ---
 
+## 十六、文件上传模块 (UploadController)
+
+### 模块说明
+通用文件上传功能，支持图片和视频上传，用于支撑发帖、猫咪建档等业务场景。
+
+### 接口列表
+
+| 序号 | 接口路径 | 请求方法 | 是否需要认证 | 接口说明 |
+|------|----------|----------|-------------|----------|
+| 16.1 | `/api/upload/file` | POST | 否 | 通用文件上传（自动识别类型） |
+| 16.2 | `/api/upload/image` | POST | 否 | 图片上传 |
+| 16.3 | `/api/upload/video` | POST | 否 | 视频上传 |
+| 16.4 | `/api/upload/file` | DELETE | 是 | 删除文件 |
+
+### 16.1 通用文件上传
+
+- **URL**：`POST /api/upload/file`
+
+**请求参数**：
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| file | MultipartFile | 是 | 要上传的文件 |
+
+**支持的文件类型**：
+- 图片：jpg, jpeg, png, gif, webp, bmp
+- 视频：mp4, avi, mov, flv, wmv
+
+**文件大小限制**：
+- 图片：10MB
+- 视频：50MB
+
+**响应数据**：
+```json
+{
+  "code": 200,
+  "message": "上传成功",
+  "data": "/uploads/images/2024/01/15/abc123.jpg"
+}
+```
+
+### 16.2 图片上传
+
+- **URL**：`POST /api/upload/image`
+
+**请求参数**：
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| file | MultipartFile | 是 | 要上传的图片文件 |
+
+**响应数据**：图片URL字符串
+
+### 16.3 视频上传
+
+- **URL**：`POST /api/upload/video`
+
+**请求参数**：
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| file | MultipartFile | 是 | 要上传的视频文件 |
+
+**响应数据**：视频URL字符串
+
+### 16.4 删除文件
+
+- **URL**：`DELETE /api/upload/file?path=xxx`
+
+**请求参数**：
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| path | String | 是 | 文件路径（上传时返回的URL） |
+
+---
+
 ## ✅ 测试结果汇总
 
 | 模块 | 接口数 | 测试通过 | 状态 |
@@ -1303,5 +1406,17 @@ AI辅助功能，包括猫咪咨询、头像生成和语录生成。当前为Moc
 | 服务方资质模块 | 5 | 5 | ✅ |
 | TNR模块 | 6 | 6 | ✅ |
 | AI模块 | 4 | 4 | ✅ |
+| 文件上传模块 | 4 | 4 | ✅ |
 
-**总计**：92个接口，全部测试通过 ✅
+**总计**：96个接口，全部测试通过 ✅
+
+### 📝 测试说明
+
+#### 文件上传模块测试结果
+- ✅ 图片上传：返回路径 `/uploads/images/2026/06/17/166fc9b7d4da4f72bbd4a18b331c7aa2.jpg`
+- ✅ 通用文件上传：自动识别文件类型，返回路径 `/uploads/images/2026/06/17/4193597df4814cd0b2575e3fa18b5e91.jpg`
+- ✅ 文件删除：成功删除指定路径的文件
+
+#### 订单实付和退款金额测试结果
+- ✅ 创建订单：`actualPayment=0`, `refundAmount=0`
+- ✅ 取消订单（待接单状态）：`actualPayment=100.00`, `refundAmount=100.00`（全额退款）

@@ -55,6 +55,10 @@ public class OrderResponse {
     
     private BigDecimal totalAmount;
     
+    private BigDecimal actualPayment;
+    
+    private BigDecimal refundAmount;
+    
     private BigDecimal commissionRate;
     
     private LocalDateTime createdAt;

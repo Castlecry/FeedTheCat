@@ -70,6 +70,14 @@ public class Order {
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
     
+    @Column(name = "actual_payment", precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal actualPayment = BigDecimal.ZERO;
+    
+    @Column(name = "refund_amount", precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal refundAmount = BigDecimal.ZERO;
+    
     @Column(name = "commission_rate", precision = 5, scale = 2)
     @Builder.Default
     private BigDecimal commissionRate = new BigDecimal("0.1");

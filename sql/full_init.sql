@@ -84,6 +84,8 @@ CREATE TABLE IF NOT EXISTS orders (
     emergency_contact VARCHAR(100) COMMENT '紧急联系人',
     address VARCHAR(500) NOT NULL COMMENT '服务地址',
     total_amount DECIMAL(10,2) NOT NULL COMMENT '订单总额',
+    actual_payment DECIMAL(10,2) DEFAULT 0 COMMENT '实付金额',
+    refund_amount DECIMAL(10,2) DEFAULT 0 COMMENT '退款金额',
     commission_rate DECIMAL(5,2) DEFAULT 0.1 COMMENT '平台佣金比例',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

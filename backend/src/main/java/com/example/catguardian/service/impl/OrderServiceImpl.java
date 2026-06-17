@@ -198,7 +198,13 @@ public class OrderServiceImpl implements OrderService {
                     userId, orderId, deductionAmount.intValue(), deductionReason);
         }
         
+        // 计算退款金额
+        BigDecimal refundAmount = order.getTotalAmount()
+                .multiply(BigDecimal.ONE.subtract(deductionRate));
+        
         order.setStatus(OrderStatus.CANCELLED.getCode());
+        order.setActualPayment(order.getTotalAmount());
+        order.setRefundAmount(refundAmount);
         
         Order savedOrder = orderRepository.save(order);
         log.info("订单取消成功: {}", savedOrder.getId());
@@ -297,6 +303,8 @@ public class OrderServiceImpl implements OrderService {
                 .emergencyContact(order.getEmergencyContact())
                 .address(order.getAddress())
                 .totalAmount(order.getTotalAmount())
+                .actualPayment(order.getActualPayment())
+                .refundAmount(order.getRefundAmount())
                 .commissionRate(order.getCommissionRate())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())

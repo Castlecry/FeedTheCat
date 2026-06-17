@@ -90,7 +90,13 @@ sql/
 |------|------|--------|
 | AI模块 | 养猫建议、头像生成、语录生成 | 4 |
 
-**总计：92个API接口**
+### 文件上传模块
+
+| 模块 | 说明 | 接口数 |
+|------|------|--------|
+| 文件上传模块 | 通用图片/视频上传、文件删除 | 4 |
+
+**总计：96个API接口**
 
 ## 业务流程
 
@@ -127,14 +133,14 @@ sql/
 
 1. 创建数据库：
 ```sql
-CREATE DATABASE cat_guardian DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE weimao DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 2. 修改 `backend/src/main/resources/application.yml` 中的数据库配置：
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/cat_guardian?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/weimao?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: your_username
     password: your_password
 ```
@@ -172,6 +178,8 @@ java -jar target/cat-guardian.jar
 - `/api/hospitals/**` - 医院信息
 - `/api/mall/products/**` - 商品浏览
 - `/api/exchange/items/**` - 兑换商品浏览
+- `/api/upload/**` - 文件上传（图片/视频）
+- `/uploads/**` - 上传文件访问
 - `/swagger-ui/**` - API文档
 
 认证方式：在请求头中添加 `Authorization: Bearer <token>`
