@@ -47,13 +47,12 @@ public class AiServiceImpl implements AiService {
             "晒太阳是每天最重要的事",
             "毛线球是天敌！"
     };
-    private static final String[] ADVICE_TOPICS = {"diet", "health", "behavior", "environment", "play"};
-    private static final String[] ADVICE_CONTENTS = {
-            "建议每天定时喂食，保持饮食规律",
-            "定期带猫咪去医院做体检",
-            "可以使用逗猫棒与猫咪互动",
-            "保持猫砂盆清洁很重要",
-            "给猫咪提供足够的活动空间"
+    private static final String[] MOCK_ADVICES = {
+            "建议每天定时喂食，保持饮食规律，避免频繁更换猫粮品牌。如果猫咪食欲不振，可以尝试将猫粮稍微加热，增加食物的香味来吸引猫咪进食。",
+            "定期带猫咪去医院做体检，建议每年至少一次全面检查。注意观察猫咪的精神状态、食欲和排泄情况，发现异常及时就医。",
+            "猫咪抓沙发是天性，建议提供猫抓板或猫爬架作为替代。可以在沙发上贴双面胶或使用防抓喷雾，同时用逗猫棒引导猫咪使用猫抓板。",
+            "保持猫砂盆清洁很重要，建议每天至少清理一次，每周彻底更换一次猫砂。如果猫咪突然不在猫砂盆排泄，可能是健康问题或压力导致，需要关注。",
+            "给猫咪提供足够的活动空间和玩具，每天至少互动玩耍15-20分钟。窗台上的观景位可以让猫咪观察外面的世界，有助于缓解无聊和焦虑。"
     };
     
     private final Random random = new Random();
@@ -62,21 +61,23 @@ public class AiServiceImpl implements AiService {
     public AiAvatarResponse generateAvatar(Long userId, AiAvatarRequest request) {
         checkUsageLimit(userId);
         
+        String prompt = request.getPrompt();
         String style = request.getStyle();
         if (style == null || style.isEmpty()) {
-            style = AVATAR_STYLES[random.nextInt(AVATAR_STYLES.length)];
+            style = "cartoon";
         }
         
         // TODO: 接入真实AI图片生成API
         // 示例：调用DALL-E / Stable Diffusion等图片生成服务
-        // String prompt = "Generate a " + style + " style cat avatar";
-        // String imageUrl = callImageGenerationApi(prompt);
-        String generatedUrl = "https://example.com/ai/avatar/" + System.currentTimeMillis() + "?style=" + style;
+        // String fullPrompt = "Generate a " + style + " style cat avatar: " + prompt;
+        // String imageUrl = callImageGenerationApi(fullPrompt);
+        String generatedUrl = "https://example.com/ai/avatar/" + System.currentTimeMillis() + "?style=" + style + "&prompt=" + prompt.hashCode();
         
-        log.info("用户 {} 生成猫咪头像, style: {}", userId, style);
+        log.info("用户 {} 生成猫咪头像, prompt: {}, style: {}", userId, prompt, style);
         return AiAvatarResponse.builder()
-                .url(generatedUrl)
+                .prompt(prompt)
                 .style(style)
+                .url(generatedUrl)
                 .build();
     }
     
@@ -100,20 +101,24 @@ public class AiServiceImpl implements AiService {
     public AiAdviceResponse generateAdvice(Long userId, AiAdviceRequest request) {
         checkUsageLimit(userId);
         
-        String topic = request.getTopic();
-        if (topic == null || topic.isEmpty()) {
-            topic = ADVICE_TOPICS[random.nextInt(ADVICE_TOPICS.length)];
-        }
+        String question = request.getQuestion();
+        String catBreed = request.getCatBreed();
+        String catAge = request.getCatAge();
         
         // TODO: 接入真实AI文本生成API
         // 示例：调用ChatGPT / 文心一言等大语言模型
-        // String prompt = "作为宠物专家，请给出关于" + topic + "的养猫建议";
-        // String advice = callTextGenerationApi(prompt);
-        String advice = ADVICE_CONTENTS[random.nextInt(ADVICE_CONTENTS.length)];
+        // StringBuilder promptBuilder = new StringBuilder();
+        // promptBuilder.append("作为宠物专家，请回答以下问题：").append(question);
+        // if (catBreed != null) promptBuilder.append("。猫咪品种：").append(catBreed);
+        // if (catAge != null) promptBuilder.append("。猫咪年龄：").append(catAge);
+        // String advice = callTextGenerationApi(promptBuilder.toString());
+        String advice = MOCK_ADVICES[random.nextInt(MOCK_ADVICES.length)];
         
-        log.info("用户 {} 生成饲养建议, topic: {}", userId, topic);
+        log.info("用户 {} 生成饲养建议, question: {}, catBreed: {}, catAge: {}", userId, question, catBreed, catAge);
         return AiAdviceResponse.builder()
-                .topic(topic)
+                .question(question)
+                .catBreed(catBreed)
+                .catAge(catAge)
                 .advice(advice)
                 .build();
     }

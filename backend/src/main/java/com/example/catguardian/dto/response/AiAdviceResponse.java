@@ -9,8 +9,24 @@ import lombok.Data;
 @Data
 @Builder
 public class AiAdviceResponse {
-    
-    private String topic;
-    
+
+    /**
+     * 用户的问题
+     */
+    private String question;
+
+    /**
+     * 猫咪品种（如果用户提供了）
+     */
+    private String catBreed;
+
+    /**
+     * 猫咪年龄（如果用户提供了）
+     */
+    private String catAge;
+
+    /**
+     * AI生成的饲养建议
+     */
     private String advice;
 }
